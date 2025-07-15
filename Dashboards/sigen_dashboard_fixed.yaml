@@ -199,9 +199,9 @@ views:
                   type: custom:mushroom-template-card
                   primary: >
                     {% set power =
-                    states('sensor.sign_inverter.dc_charger.output_power') |
+                    states('sensor.sign_inverter_dc_charger_dc_charger_output_power') |
                     float(0) %} {% set soc =
-                    states('sensor.sign_inverter.dc_charger.vehicle_soc') %} {%
+                    states('sensor.sign_inverter_dc_charger_dc_charger_vehicle_soc') %} {%
                     if power > 0 %}
                       {{ power | round(1) }}kW - {{ soc if soc not in ['unknown', 'unavailable', None] else 'N/A' }}%
                     {% else %}
@@ -209,9 +209,9 @@ views:
                     {% endif %}
                   secondary: >
                     {% set voltage =
-                    states('sensor.sign_inverter.dc_charger.vehicle_battery_voltage')
+                    states('sensor.sign_inverter_dc_charger_dc_charger_vehicle_battery_voltage')
                     %} {% set current =
-                    states('sensor.sign_inverter.dc_charger.charging_current')
+                    states('sensor.sign_inverter_dc_charger_dc_charger_charging_current')
                     %} {% if voltage not in ['unknown', 'unavailable', None] and
                     current not in ['unknown', 'unavailable', None] %}
                       {{ voltage }}V @ {{ current }}A
@@ -1091,25 +1091,28 @@ views:
                   type: custom:mushroom-template-card
                   primary: >
                     {% set power =
-                    states('sensor.sigen_inverter_dc_charger_dc_charger_output_power')
-                    | float(0) %} {% set soc_raw =
-                    states('sensor.wvwzzzed3se512936_battery_level') %} {% set
-                    soc = soc_raw | float(0) if soc_raw not in ['unknown',
-                    'unavailable', None] else 'N/A' %} {% set range_raw =
-                    states('sensor.wvwzzzed3se512936_battery_cruising_range') %}
-                    {% set range = range_raw | float(0) if range_raw not in
-                    ['unknown', 'unavailable', None] else 'N/A' %} {% if power >
-                    0 %} {{ power | round(1) }}kW - {{ soc }}% ({{ range |
-                    round(0) }}km) {% else %}
-                      {{ soc }}% ({{ range | round(0) }}km)
+                    states('sensor.sign_inverter_dc_charger_dc_charger_output_power') |
+                    float(0) %} {% set soc =
+                    states('sensor.sign_inverter_dc_charger_dc_charger_vehicle_soc') %} {%
+                    if power > 0 %}
+                      {{ power | round(1) }}kW - {{ soc if soc not in ['unknown', 'unavailable', None] else 'N/A' }}%
+                    {% else %}
+                      {{ soc if soc not in ['unknown', 'unavailable', None] else 'N/A' }}%
                     {% endif %}
                   secondary: >
-                    {% set soc =
-                    states('sensor.sigen_inverter_dc_charger_dc_charger_vehicle_soc')
-                    %} {% if soc == 'unknown' %}
-                      Car Asleep
+                    {% set voltage =
+                    states('sensor.sign_inverter_dc_charger_dc_charger_vehicle_battery_voltage')
+                    %} {% set current =
+                    states('sensor.sign_inverter_dc_charger_dc_charger_charging_current')
+                    %} {% if voltage not in ['unknown', 'unavailable', None] and
+                    current not in ['unknown', 'unavailable', None] %}
+                      {{ voltage }}V @ {{ current }}A
+                    {% elif voltage not in ['unknown', 'unavailable', None] %}
+                      {{ voltage }}V
+                    {% elif current not in ['unknown', 'unavailable', None] %}
+                      {{ current }}A
                     {% else %}
-                      Buzz Lightgear
+                      DC Charger
                     {% endif %}
                   multiline_secondary: false
                   fill_container: false
@@ -1467,9 +1470,9 @@ views:
                   type: custom:mushroom-template-card
                   primary: >
                     {% set power =
-                    states('sensor.sign_inverter.dc_charger.output_power') |
+                    states('sensor.sign_inverter_dc_charger_dc_charger_output_power') |
                     float(0) %} {% set soc =
-                    states('sensor.sign_inverter.dc_charger.vehicle_soc') %} {%
+                    states('sensor.sign_inverter_dc_charger_dc_charger_vehicle_soc') %} {%
                     if power > 0 %}
                       {{ power | round(1) }}kW - {{ soc if soc not in ['unknown', 'unavailable', None] else 'N/A' }}%
                     {% else %}
@@ -1477,9 +1480,9 @@ views:
                     {% endif %}
                   secondary: >
                     {% set voltage =
-                    states('sensor.sign_inverter.dc_charger.vehicle_battery_voltage')
+                    states('sensor.sign_inverter_dc_charger_dc_charger_vehicle_battery_voltage')
                     %} {% set current =
-                    states('sensor.sign_inverter.dc_charger.charging_current')
+                    states('sensor.sign_inverter_dc_charger_dc_charger_charging_current')
                     %} {% if voltage not in ['unknown', 'unavailable', None] and
                     current not in ['unknown', 'unavailable', None] %}
                       {{ voltage }}V @ {{ current }}A
