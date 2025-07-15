@@ -1,0 +1,64 @@
+set_operation_mode:
+  name: Set Operation Mode
+  description: Set the operation mode of the Sigenergy system.
+  target:
+    entity:
+      integration: sigen
+      domain: select
+  fields:
+    mode:
+      name: Mode
+      description: The operation mode to set.
+      required: true
+      example: "Maximum Self Consumption"
+      selector:
+        select:
+          options:
+            - "Maximum Self Consumption"
+            - "AI Mode"
+            - "Time of Use"
+            - "Remote EMS"
+
+set_remote_ems_control_mode:
+  name: Set Remote EMS Control Mode
+  description: Set the remote EMS control mode of the Sigenergy system.
+  target:
+    entity:
+      integration: sigen
+      domain: select
+  fields:
+    mode:
+      name: Mode
+      description: The remote EMS control mode to set.
+      required: true
+      example: "PCS Remote Control"
+      selector:
+        select:
+          options:
+            - "PCS Remote Control"
+            - "Standby"
+            - "Maximum Self Consumption"
+            - "Command Charging (Grid First)"
+            - "Command Charging (PV First)"
+            - "Command Discharging (PV First)"
+            - "Command Discharging (ESS First)"
+
+set_power_limit:
+  name: Set Power Limit
+  description: Set a power limit for the Sigenergy system.
+  target:
+    entity:
+      integration: sigen
+      domain: number
+  fields:
+    value:
+      name: Value
+      description: The power limit value to set.
+      required: true
+      example: 5.0
+      selector:
+        number:
+          min: 0
+          max: 100
+          step: 0.1
+          unit_of_measurement: kW
