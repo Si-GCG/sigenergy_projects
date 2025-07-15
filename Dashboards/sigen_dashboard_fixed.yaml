@@ -15,7 +15,7 @@ views:
               home_image:
                 card:
                   type: picture
-                  image: /local/community/Sigenergy/sys_type_resd.png
+                  image: /local/Sigenergy/sys_type_resd.png
                   card_mod:
                     style: |
                       ha-card { background-color: transparent; border: none; }
