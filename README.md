@@ -13,11 +13,16 @@ Welcome to the **sigenergy_projects** repo! This is my home for all things Sigen
 Anyone looking to supercharge their Home Assistant setup with Sigenergy integrations, or just someone who enjoys a good workaround.
 
 ## How to Use
+First and foremost this makes use of the amazing local modbus Sigenergy integration by Andrei Ignat: https://github.com/TypQxQ/Sigenergy-Local-Modbus/tree/main
+I would recommend that you just go for it and do the full install with control not just monitoring as it opens up a lot more entities.
 
-1. Browse the folders for cards, templates, or hacks you need.
-2. Copy, tweak, and enjoy.
-3. Got improvements? PRs welcome!
-4. double check the names of your entities and edit as required.
+1. Ensure that you have file editor installed so you can upload the images. I have uploaded a few but the ultimate source for the images is: https://github.com/vdvmichel/sigen-app-images
+2. In File Editor navigate to www and then create a new folder called "Sigenergy".
+3. Go into the new folder and upload the images you want to use.
+4. Browse the folders for cards, templates, or hacks you need.
+5. Copy, tweak, and enjoy.
+6. Got improvements? PRs welcome!
+7. Double check the names of your entities and edit as required.
 
 ## Why Sigenergy?
 
