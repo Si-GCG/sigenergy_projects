@@ -34,361 +34,7 @@ views:
                         .primary {
                           font-size: 14px !important;
                           font-weight: bold;
-                          color: #e0e0e0 !important;        /* Light gray for subtlety */
-                          text-shadow: 1px 1px 4px #222;    /* Softer shadow */
-                        } .secondary {
-                          font-size: 12px !important;
-                          font-weight: bold;
-                          color: #90caf9 !important;        /* Soft blue for subtle highlight */
-                          text-shadow: 1px 1px 4px #222;
-                        }
-                      .: |
-                        ha-card { background-color: transparent; border: none; }
-              load_power:
-                card:
-                  type: custom:mushroom-template-card
-                  primary: >
-                    {% set power = states('sensor.sigen_plant_consumed_power') |
-                    float(0) %} {{ power | round(1) }}kW
-                  secondary: HOME
-                  multiline_secondary: false
-                  fill_container: false
-                  card_mod:
-                    style:
-                      mushroom-state-info$: >
-                        .primary { font-size: 14px !important; font-weight: bold
-                        !important; position: relative; letter-spacing: -0.1px
-                        !important; overflow: visible !important; text-align:
-                        left; }
-
-                        .secondary { font-size: 12px !important; color: gray
-                        !important; letter-spacing: -0.1px !important; position:
-                        relative; overflow: visible !important; text-align:
-                        left; }
-                      .: |
-                        ha-card { background-color: transparent; border: none; }
-              grid_power:
-                card:
-                  type: custom:mushroom-template-card
-                  primary: >
-                    {% set import =
-                    states('sensor.sigen_plant_grid_import_power') | float(0) %}
-                    {% set export =
-                    states('sensor.sigen_plant_grid_export_power') | float(0) %}
-                    {% if import > 0 %}
-                      {{ import | round(1) }}kW
-                    {% elif export > 0 %}
-                      {{ (0 - export) | round(1) }}kW
-                    {% else %}
-                      0kW
-                    {% endif %}
-                  secondary: GRID
-                  multiline_secondary: false
-                  fill_container: false
-                  card_mod:
-                    style:
-                      mushroom-state-info$: >
-                        .primary { font-size: 14px !important; font-weight: bold
-                        !important; position: relative; letter-spacing: -0.1px
-                        !important; overflow: visible !important; text-align:
-                        left; }
-
-                        .secondary { font-size: 12px !important; color: gray
-                        !important; letter-spacing: -0.1px !important; position:
-                        relative; overflow: visible !important; text-align:
-                        left; }
-                      .: |
-                        ha-card { background-color: transparent; border: none; }
-              grid_flow_label:
-                card:
-                  type: custom:mushroom-template-card
-                  primary: >
-                    {% set import =
-                    states('sensor.sigen_plant_grid_import_power') | float(0) %}
-                    {% set export =
-                    states('sensor.sigen_plant_grid_export_power') | float(0) %}
-                    {% if import > 0 %}
-                      Importing
-                    {% elif export > 0 %}
-                      Exporting
-                    {% else %}
-                      
-                    {% endif %}
-                  multiline_secondary: false
-                  fill_container: false
-                  card_mod:
-                    style:
-                      mushroom-state-info$: >
-                        .primary { font-size: 12px !important; font-weight: bold
-                        !important; letter-spacing: -0.1px !important; color:
-                        green !important; position: relative; overflow: visible
-                        !important; text-align: left; }
-                      .: |
-                        ha-card { background-color: transparent; border: none; }
-            ev_soc:
-              card:
-                type: custom:mushroom-template-card
-                primary: >
-                  {% set power =
-                  states('sensor.sigen_inverter_dc_charger_dc_charger_output_power')
-                  | float(0) %} {% set soc_raw =
-                  states('sensor.wvwzzzed3se512936_battery_level') %} {% set soc
-                  = soc_raw | float(0) if soc_raw not in ['unknown',
-                  'unavailable', None] else 'N/A' %} {% set range_raw =
-                  states('sensor.wvwzzzed3se512936_battery_cruising_range') %}
-                  {% set range = range_raw | float(0) if range_raw not in
-                  ['unknown', 'unavailable', None] else 'N/A' %} {% if power > 0
-                  %}
-                   {{ power | round(1) }}kW - {{ soc }}% ({{ range if range == 'N/A' else (range | round(0)) }}km)
-                  {% else %}
-                   {{ soc }}% ({{ range if range == 'N/A' else (range | round(0)) }}km)
-                  {% endif %}
-                secondary: >
-                  {% set soc =
-                  states('sensor.sigen_inverter_dc_charger_dc_charger_vehicle_soc')
-                  %} {% if soc == 'unknown' %}
-                    Car Asleep
-                  {% else %}
-                    Buzz Lightgear
-                  {% endif %}
-                multiline_secondary: false
-                fill_container: false
-                card_mod:
-                  style:
-                    mushroom-state-info$: >
-                      .primary { font-size: 14px !important; font-weight: bold
-                      !important; position: relative; letter-spacing: -0.1px
-                      !important; overflow: visible !important; text-align:
-                      left; } .secondary { font-size: 12px !important; color:
-                      gray !important; position: relative; letter-spacing:
-                      -0.1px !important; overflow: visible !important;
-                      text-align: left; }
-                    .: |
-                      ha-card { background-color: transparent; border: none; }
-              ev_dc_power:
-                card:
-                  type: custom:mushroom-template-card
-                  primary: >
-                    {% set dcrunstatus =
-                    states('sensor.sigen_inverter_running_state') | float(0) %}
-                    {% if dcrunstatus == 2 %} Charging {% elif dcrunstatus == 3
-                    %} Charging (Scheduled) {% elif dcrunstatus == 5 %}
-                    Reserving {% else %} Available {% endif %}
-                  secondary: DC CHARGER
-                  multiline_secondary: false
-                  fill_container: false
-                  card_mod:
-                    style:
-                      mushroom-state-info$: >
-                        .primary { font-size: 14px !important; font-weight: bold
-                        !important; position: relative; letter-spacing: -0.1px
-                        !important; overflow: visible !important; text-align:
-                        left; }
-
-                        .secondary { font-size: 12px !important; color: gray
-                        !important; position: relative; letter-spacing: -0.1px
-                        !important; overflow: visible !important; text-align:
-                        left; }
-                      .: |
-                        ha-card { background-color: transparent; border: none; }
-              ev_charging_label:
-                card:
-                  type: custom:mushroom-template-card
-                  primary: >
-                    {% set soc_power =
-                    states('sensor.sigen_inverter_dc_charger_dc_charger_output_power')
-                    | float(0) %} {% if soc_power > 0 %}
-                      Charging
-                    {% endif %}
-                  multiline_secondary: false
-                  fill_container: false
-                  card_mod:
-                    style:
-                      mushroom-state-info$: >
-                        .primary { font-size: 12px !important; font-weight: bold
-                        !important; letter-spacing: -0.1px !important; color:
-                        red !important; position: relative; overflow: visible
-                        !important; text-align: left; }
-                      .: |
-                        ha-card { background-color: transparent; border: none; }
-              ev_charging_icon:
-                card:
-                  type: custom:mushroom-template-card
-                  icon: >-
-                    {% set soc_power =
-                    states('sensor.sigen_inverter_dc_charger_dc_charger_output_power')
-                    | float(0) %} {% if soc_power > 0 %}
-                      mdi:lightning-bolt
-                    {% endif %}
-                  icon_color: >-
-                    {% set soc_power =
-                    states('sensor.sigen_inverter_dc_charger_dc_charger_output_power')
-                    | float(0) %} {% if soc_power > 0 %}
-                      red
-                    {% endif %}
-                  fill_container: false
-                  card_mod:
-                    style:
-                      mushroom-state-info$: >
-                        .primary { font-size: 12px !important; font-weight: bold
-                        !important; letter-spacing: -0.1px !important; color:
-                        lightgreen !important; position: relative; overflow:
-                        visible !important; text-align: left; }
-                      .: |
-                        ha-card { background-color: transparent; border: none; }
-              vertical_line:
-                card:
-                  type: custom:button-card
-                  card_mod:
-                    style: |
-                      ha-card {
-                        background-color: transparent;
-                        border: none;
-                        position: relative;
-                        width: 1px;
-                        height: 110px;
-                        background-color: gray;
-                        overflow: hidden;
-                        animation: rotation 2s linear infinite;
-                      }
-                      .line {
-                        position: absolute;
-                        width: 100%;
-                        height: 100%;
-                        background: linear-gradient(0deg, green 50%, transparent 50%);
-                        background-size: 100% 200%;
-                      }
-                      @keyframes rotation {
-                        0% { transform: rotate(0deg); }
-                        100% { transform: rotate(360deg); }
-                      }
-            styles:
-              card:
-                - align-self: start
-                - height: >
-                    [[[ return states['input_number.sigen_home_card_height'] &&
-                    states['input_number.sigen_home_card_height'].state
-                        ? states['input_number.sigen_home_card_height'].state + 'px'
-                        : '400px'; ]]]
-                - opacity: 1
-                - background-color: transparent
-                - border: none
-              custom_fields:
-                home_image:
-                  - position: absolute
-                  - top: 5px
-                  - left: 10px
-                  - width: 395px
-                sigenstor_inverter:
-                  - position: absolute
-                  - top: 5px
-                  - left: 10px
-                  - width: 395px
-                ammeter_home_image:
-                  - position: absolute
-                  - top: 5px
-                  - left: 10px
-                  - width: 395px
-                ac_charger_bg_image:
-                  - position: absolute
-                  - top: 5px
-                  - left: 10px
-                  - width: 395px
-                pv_power:
-                  - position: absolute
-                  - top: 50px
-                  - left: 150px
-                  - width: 100px
-                load_power:
-                  - position: absolute
-                  - top: 15px
-                  - left: 300px
-                  - width: 100px
-                water_diverter_power:
-                  - position: absolute
-                  - top: 110px
-                  - left: 130px
-                  - width: 100px
-                grid_power:
-                  - position: absolute
-                  - top: 300px
-                  - left: 300px
-                  - width: 100px
-                grid_flow_label:
-                  - position: absolute
-                  - top: 335px
-                  - left: 300px
-                  - width: 100px
-                battery_soc:
-                  - position: absolute
-                  - top: 300px
-                  - left: 175px
-                  - width: 100px
-                battery_discharge_label:
-                  - position: absolute
-                  - top: 335px
-                  - left: 175px
-                  - width: 100px
-                battery_charge_label:
-                  - position: absolute
-                  - top: 335px
-                  - left: 175px
-                  - width: 100px
-                ev_soc:
-                  - position: absolute
-                  - top: 300px
-                  - left: 20px
-                  - width: 100px
-                ev_ac_power:
-                  - position: absolute
-                  - top: 15px
-                  - left: 20px
-                  - width: 100px
-                ev_charging_label:
-                  - position: absolute
-                  - top: 335px
-                  - left: 20px
-                  - width: 100px
-                ev_charging_icon:
-                  - position: absolute
-                  - top: 245px
-                  - left: 10px
-                  - width: 100px
-                vertical_line:
-                  - position: absolute
-                  - top: 47px
-                  - left: 305px
-                  - width: 1px
-                  - height: 100px
-      - type: grid
-        cards:
-          - type: custom:button-card
-            show_state: true
-            tap_action: none
-            custom_fields:
-              sigenstor_inverter:
-                card:
-                  type: picture
-                  image: /local/Sigenergy/1inverter1dcCharger2battery.png
-                  card_mod:
-                    style: |
-                      ha-card { background-color: transparent; border: none; }
-              pv_power:
-                card:
-                  type: custom:mushroom-template-card
-                  primary: >
-                    {% set power = states('sensor.sigen_inverter_pv_power') |
-                    float(0) %} {{ power | round(1) }}kW
-                  secondary: SOLAR
-                  multiline_secondary: false
-                  fill_container: false
-                  card_mod:
-                    style:
-                      mushroom-state-info$: |
-                        .primary {
-                          font-size: 14px !important;
-                          font-weight: bold;
-                          color: black !important;          
+                          color: white !important;          
                         } .secondary {
                           font-size: 12px !important;
                           font-weight: bold;
@@ -553,25 +199,28 @@ views:
                   type: custom:mushroom-template-card
                   primary: >
                     {% set power =
-                    states('sensor.sigen_inverter_dc_charger_dc_charger_output_power')
-                    | float(0) %} {% set soc_raw =
-                    states('sensor.wvwzzzed3se512936_battery_level') %} {% set
-                    soc = soc_raw | float(0) if soc_raw not in ['unknown',
-                    'unavailable', None] else 'N/A' %} {% set range_raw =
-                    states('sensor.wvwzzzed3se512936_battery_cruising_range') %}
-                    {% set range = range_raw | float(0) if range_raw not in
-                    ['unknown', 'unavailable', None] else 'N/A' %} {% if power >
-                    0 %} {{ power | round(1) }}kW - {{ soc }}% ({{ range |
-                    round(0) }}km) {% else %}
-                      {{ soc }}% ({{ range | round(0) }}km)
+                    states('sensor.sign_inverter.dc_charger.output_power') |
+                    float(0) %} {% set soc =
+                    states('sensor.sign_inverter.dc_charger.vehicle_soc') %} {%
+                    if power > 0 %}
+                      {{ power | round(1) }}kW - {{ soc if soc not in ['unknown', 'unavailable', None] else 'N/A' }}%
+                    {% else %}
+                      {{ soc if soc not in ['unknown', 'unavailable', None] else 'N/A' }}%
                     {% endif %}
                   secondary: >
-                    {% set soc =
-                    states('sensor.sigen_inverter_dc_charger_dc_charger_vehicle_soc')
-                    %} {% if soc == 'unknown' %}
-                      Car Asleep
+                    {% set voltage =
+                    states('sensor.sign_inverter.dc_charger.vehicle_battery_voltage')
+                    %} {% set current =
+                    states('sensor.sign_inverter.dc_charger.charging_current')
+                    %} {% if voltage not in ['unknown', 'unavailable', None] and
+                    current not in ['unknown', 'unavailable', None] %}
+                      {{ voltage }}V @ {{ current }}A
+                    {% elif voltage not in ['unknown', 'unavailable', None] %}
+                      {{ voltage }}V
+                    {% elif current not in ['unknown', 'unavailable', None] %}
+                      {{ current }}A
                     {% else %}
-                      Buzz Lightgear
+                      DC Charger
                     {% endif %}
                   multiline_secondary: false
                   fill_container: false
@@ -671,59 +320,59 @@ views:
                     [[[ return states['input_number.sigen_home_card_height'] &&
                     states['input_number.sigen_home_card_height'].state
                         ? states['input_number.sigen_home_card_height'].state + 'px'
-                        : '500px'; ]]]
+                        : '400px'; ]]]
                 - opacity: 1
                 - background-color: transparent
                 - border: none
               custom_fields:
-                sigenstor_inverter:
+                home_image:
                   - position: absolute
                   - top: 5px
                   - left: 10px
                   - width: 395px
                 pv_power:
                   - position: absolute
-                  - top: 50px
-                  - left: 97px
+                  - top: 40px
+                  - left: 200px
                   - width: 100px
                 load_power:
                   - position: absolute
-                  - top: 250px
-                  - left: 120px
+                  - top: 0px
+                  - left: 350px
                   - width: 100px
                 grid_power:
                   - position: absolute
-                  - top: 340px
-                  - left: 285px
+                  - top: 300px
+                  - left: 280px
                   - width: 100px
                 grid_flow_label:
                   - position: absolute
-                  - top: 375px
-                  - left: 285px
+                  - top: 335px
+                  - left: 280px
                   - width: 100px
                 battery_soc:
                   - position: absolute
-                  - top: 95px
-                  - left: 120px
+                  - top: 270px
+                  - left: 160px
                   - width: 100px
                 battery_discharge_label:
                   - position: absolute
-                  - top: 130px
-                  - left: 120px
+                  - top: 305px
+                  - left: 160px
                   - width: 100px
                 battery_charge_label:
                   - position: absolute
-                  - top: 130px
-                  - left: 120px
+                  - top: 305px
+                  - left: 160px
                   - width: 100px
                 ev_soc:
                   - position: absolute
-                  - top: 130px
-                  - left: 285px
+                  - top: 250px
+                  - left: 20px
                   - width: 100px
-                ev_ac_power:
+                ev_dc_power:
                   - position: absolute
-                  - top: 15px
+                  - top: 300px
                   - left: 20px
                   - width: 100px
                 ev_charging_label:
@@ -733,8 +382,8 @@ views:
                   - width: 100px
                 ev_charging_icon:
                   - position: absolute
-                  - top: 245px
-                  - left: 10px
+                  - top: 345px
+                  - left: 20px
                   - width: 100px
       - type: grid
         cards:
@@ -1244,4 +893,764 @@ views:
           - entity: sensor.sigen_plant_daily_grid_export_energy
           - entity: sensor.sigen_plant_daily_grid_import_energy
         title: Calculated Daily Energy values
+  - type: sections
+    max_columns: 4
+    title: test
+    path: test
+    sections:
+      - type: grid
+        cards:
+          - type: custom:button-card
+            show_state: true
+            tap_action: none
+            custom_fields:
+              sigenstor_inverter:
+                card:
+                  type: picture
+                  image: /local/Sigenergy/1inverter1dcCharger2battery.png
+                  card_mod:
+                    style: |
+                      ha-card { background-color: transparent; border: none; }
+              pv_power:
+                card:
+                  type: custom:mushroom-template-card
+                  primary: >
+                    {% set power = states('sensor.sigen_inverter_pv_power') |
+                    float(0) %} {{ power | round(1) }}kW
+                  secondary: SOLAR
+                  multiline_secondary: false
+                  fill_container: false
+                  card_mod:
+                    style:
+                      mushroom-state-info$: |
+                        .primary {
+                          font-size: 14px !important;
+                          font-weight: bold;
+                          color: black !important;          
+                        } .secondary {
+                          font-size: 12px !important;
+                          font-weight: bold;
+                          color: grey !important;       
+                        }
+                      .: |
+                        ha-card { background-color: transparent; border: none; }
+              load_power:
+                card:
+                  type: custom:mushroom-template-card
+                  primary: >
+                    {% set power = states('sensor.sigen_plant_consumed_power') |
+                    float(0) %} {{ power | round(1) }}kW
+                  secondary: HOME
+                  multiline_secondary: false
+                  fill_container: false
+                  card_mod:
+                    style:
+                      mushroom-state-info$: >
+                        .primary { font-size: 14px !important; font-weight:
+                        bold; colour: black !important; position: relative;
+                        letter-spacing: -0.1px !important; overflow: visible
+                        !important; text-align: left; }
+
+                        .secondary { font-size: 12px !important; color: gray
+                        !important; letter-spacing: -0.1px !important; position:
+                        relative; overflow: visible !important; text-align: left
+                        ; }
+                      .: |
+                        ha-card { background-color: transparent; border: none; }
+              grid_power:
+                card:
+                  type: custom:mushroom-template-card
+                  primary: >
+                    {% set import =
+                    states('sensor.sigen_plant_grid_import_power') | float(0) %}
+                    {% set export =
+                    states('sensor.sigen_plant_grid_export_power') | float(0) %}
+                    {% if import > 0 %}
+                      {{ import | round(1) }}kW
+                    {% elif export > 0 %}
+                      {{ (0 - export) | round(1) }}kW
+                    {% else %}
+                      0kW
+                    {% endif %}
+                  secondary: GRID
+                  multiline_secondary: false
+                  fill_container: false
+                  card_mod:
+                    style:
+                      mushroom-state-info$: >
+                        .primary { font-size: 14px !important; font-weight: bold
+                        !important; position: relative; letter-spacing: -0.1px
+                        !important; overflow: visible !important; text-align:
+                        left; }
+
+                        .secondary { font-size: 12px !important; color: gray
+                        !important; letter-spacing: -0.1px !important; position:
+                        relative; overflow: visible !important; text-align:
+                        left; }
+                      .: |
+                        ha-card { background-color: transparent; border: none; }
+              grid_flow_label:
+                card:
+                  type: custom:mushroom-template-card
+                  primary: >
+                    {% set import =
+                    states('sensor.sigen_plant_grid_import_power') | float(0) %}
+                    {% set export =
+                    states('sensor.sigen_plant_grid_export_power') | float(0) %}
+                    {% if import > 0 %}
+                      Importing
+                    {% elif export > 0 %}
+                      Exporting
+                    {% else %}
+                      
+                    {% endif %}
+                  multiline_secondary: false
+                  fill_container: false
+                  card_mod:
+                    style:
+                      mushroom-state-info$: >
+                        .primary { font-size: 12px !important; font-weight: bold
+                        !important; letter-spacing: -0.1px !important; color:
+                        green !important; position: relative; overflow: visible
+                        !important; text-align: left; }
+                      .: |
+                        ha-card { background-color: transparent; border: none; }
+              battery_soc:
+                card:
+                  type: custom:mushroom-template-card
+                  primary: >
+                    {% set soc =
+                    states('sensor.sigen_plant_battery_state_of_charge') %} {%
+                    set soc_power = states('sensor.sigen_plant_battery_power') |
+                    float(0) %} {% if soc_power != 0 %}
+                      {{ soc_power | abs | round(2) }}kW · {{ soc }}%
+                    {% else %}
+                      {{ soc }}%
+                    {% endif %}
+                  secondary: SigenStor
+                  multiline_secondary: false
+                  fill_container: false
+                  card_mod:
+                    style:
+                      mushroom-state-info$: >
+                        .primary { font-size: 14px !important; font-weight: bold
+                        !important; position: relative; overflow: visible
+                        !important; letter-spacing: -0.1px !important;
+                        text-align: left; }
+
+                        .secondary { font-size: 12px !important; color: gray
+                        !important; position: relative; letter-spacing: -0.1px
+                        !important; overflow: visible !important; text-align:
+                        left; }
+                      .: |
+                        ha-card { background-color: transparent; border: none; }
+              battery_discharge_label:
+                card:
+                  type: custom:mushroom-template-card
+                  primary: >
+                    {% set soc_power =
+                    states('sensor.sigen_plant_battery_power') | float(0) %} {%
+                    if soc_power < 0 %}
+                      Discharging
+                    {% else %}
+                      
+                    {% endif %}
+                  multiline_secondary: false
+                  fill_container: false
+                  card_mod:
+                    style:
+                      mushroom-state-info$: >
+                        .primary { font-size: 12px !important; font-weight: bold
+                        !important; letter-spacing: -0.1px !important; color:
+                        green !important; position: relative; overflow: visible
+                        !important; text-align: left; }
+                      .: |
+                        ha-card { background-color: transparent; border: none; }
+              battery_charge_label:
+                card:
+                  type: custom:mushroom-template-card
+                  primary: >
+                    {% set soc_power =
+                    states('sensor.sigen_plant_battery_power') | float(0) %} {%
+                    if soc_power > 0 %}
+                      Charging
+                    {% endif %}
+                  multiline_secondary: false
+                  fill_container: false
+                  card_mod:
+                    style:
+                      mushroom-state-info$: >
+                        .primary { font-size: 12px !important; font-weight: bold
+                        !important; letter-spacing: -0.1px !important; color:
+                        red !important; position: relative; overflow: visible
+                        !important; text-align: left; }
+                      .: |
+                        ha-card { background-color: transparent; border: none; }
+              ev_soc:
+                card:
+                  type: custom:mushroom-template-card
+                  primary: >
+                    {% set power =
+                    states('sensor.sigen_inverter_dc_charger_dc_charger_output_power')
+                    | float(0) %} {% set soc_raw =
+                    states('sensor.wvwzzzed3se512936_battery_level') %} {% set
+                    soc = soc_raw | float(0) if soc_raw not in ['unknown',
+                    'unavailable', None] else 'N/A' %} {% set range_raw =
+                    states('sensor.wvwzzzed3se512936_battery_cruising_range') %}
+                    {% set range = range_raw | float(0) if range_raw not in
+                    ['unknown', 'unavailable', None] else 'N/A' %} {% if power >
+                    0 %} {{ power | round(1) }}kW - {{ soc }}% ({{ range |
+                    round(0) }}km) {% else %}
+                      {{ soc }}% ({{ range | round(0) }}km)
+                    {% endif %}
+                  secondary: >
+                    {% set soc =
+                    states('sensor.sigen_inverter_dc_charger_dc_charger_vehicle_soc')
+                    %} {% if soc == 'unknown' %}
+                      Car Asleep
+                    {% else %}
+                      Buzz Lightgear
+                    {% endif %}
+                  multiline_secondary: false
+                  fill_container: false
+                  card_mod:
+                    style:
+                      mushroom-state-info$: >
+                        .primary { font-size: 14px !important; font-weight: bold
+                        !important; position: relative; letter-spacing: -0.1px
+                        !important; overflow: visible !important; text-align:
+                        left; } .secondary { font-size: 12px !important; color:
+                        gray !important; position: relative; letter-spacing:
+                        -0.1px !important; overflow: visible !important;
+                        text-align: left; }
+                      .: |
+                        ha-card { background-color: transparent; border: none; }
+              ev_dc_power:
+                card:
+                  type: custom:mushroom-template-card
+                  primary: >
+                    {% set dcrunstatus =
+                    states('sensor.sigen_inverter_running_state') | float(0) %}
+                    {% if dcrunstatus == 2 %}
+                      Charging
+                    {% elif dcrunstatus == 3 %}
+                      Charging (Scheduled)
+                    {% elif dcrunstatus == 5 %}
+                      Reserving
+                    {% else %}
+                      Available
+                    {% endif %}
+                  secondary: DC CHARGER
+                  multiline_secondary: false
+                  fill_container: false
+                  card_mod:
+                    style:
+                      mushroom-state-info$: >
+                        .primary { font-size: 14px !important; font-weight: bold
+                        !important; position: relative; letter-spacing: -0.1px
+                        !important; overflow: visible !important; text-align:
+                        left; }
+
+                        .secondary { font-size: 12px !important; color: gray
+                        !important; position: relative; letter-spacing: -0.1px
+                        !important; overflow: visible !important; text-align:
+                        left; }
+                      .: |
+                        ha-card { background-color: transparent; border: none; }
+              ev_charging_label:
+                card:
+                  type: custom:mushroom-template-card
+                  primary: >
+                    {% set soc_power =
+                    states('sensor.sigen_inverter_dc_charger_dc_charger_output_power')
+                    | float(0) %} {% if soc_power > 0 %}
+                      Charging
+                    {% endif %}
+                  multiline_secondary: false
+                  fill_container: false
+                  card_mod:
+                    style:
+                      mushroom-state-info$: >
+                        .primary { font-size: 12px !important; font-weight: bold
+                        !important; letter-spacing: -0.1px !important; color:
+                        red !important; position: relative; overflow: visible
+                        !important; text-align: left; }
+                      .: |
+                        ha-card { background-color: transparent; border: none; }
+              ev_charging_icon:
+                card:
+                  type: custom:mushroom-template-card
+                  icon: >-
+                    {% set soc_power =
+                    states('sensor.sigen_inverter_dc_charger_dc_charger_output_power')
+                    | float(0) %} {% if soc_power > 0 %}
+                      mdi:lightning-bolt
+                    {% endif %}
+                  icon_color: >-
+                    {% set soc_power =
+                    states('sensor.sigen_inverter_dc_charger_dc_charger_output_power')
+                    | float(0) %} {% if soc_power > 0 %}
+                      red
+                    {% endif %}
+                  fill_container: false
+                  card_mod:
+                    style:
+                      mushroom-state-info$: >
+                        .primary { font-size: 12px !important; font-weight: bold
+                        !important; letter-spacing: -0.1px !important; color:
+                        lightgreen !important; position: relative; overflow:
+                        visible !important; text-align: left; }
+                      .: |
+                        ha-card { background-color: transparent; border: none; }
+            styles:
+              card:
+                - align-self: start
+                - height: >
+                    [[[ return states['input_number.sigen_home_card_height'] &&
+                    states['input_number.sigen_home_card_height'].state
+                        ? states['input_number.sigen_home_card_height'].state + 'px'
+                        : '500px'; ]]]
+                - opacity: 1
+                - background-color: transparent
+                - border: none
+              custom_fields:
+                sigenstor_inverter:
+                  - position: absolute
+                  - top: 5px
+                  - left: 10px
+                  - width: 395px
+                pv_power:
+                  - position: absolute
+                  - top: 50px
+                  - left: 97px
+                  - width: 100px
+                load_power:
+                  - position: absolute
+                  - top: 250px
+                  - left: 120px
+                  - width: 100px
+                grid_power:
+                  - position: absolute
+                  - top: 340px
+                  - left: 285px
+                  - width: 100px
+                grid_flow_label:
+                  - position: absolute
+                  - top: 375px
+                  - left: 285px
+                  - width: 100px
+                battery_soc:
+                  - position: absolute
+                  - top: 95px
+                  - left: 120px
+                  - width: 100px
+                battery_discharge_label:
+                  - position: absolute
+                  - top: 130px
+                  - left: 120px
+                  - width: 100px
+                battery_charge_label:
+                  - position: absolute
+                  - top: 130px
+                  - left: 120px
+                  - width: 100px
+                ev_soc:
+                  - position: absolute
+                  - top: 130px
+                  - left: 285px
+                  - width: 100px
+                ev_dc_power:
+                  - position: absolute
+                  - top: 170px
+                  - left: 285px
+                  - width: 100px
+                ev_charging_label:
+                  - position: absolute
+                  - top: 200px
+                  - left: 285px
+                  - width: 100px
+                ev_charging_icon:
+                  - position: absolute
+                  - top: 220px
+                  - left: 285px
+                  - width: 100px
+      - type: grid
+        cards:
+          - type: custom:button-card
+            show_state: true
+            tap_action: none
+            custom_fields:
+              home_image:
+                card:
+                  type: picture
+                  image: /local/Sigenergy/sys_type_resd.png
+                  card_mod:
+                    style: |
+                      ha-card { background-color: transparent; border: none; }
+              pv_power:
+                card:
+                  type: custom:mushroom-template-card
+                  primary: >
+                    {% set power = states('sensor.sigen_inverter_pv_power') |
+                    float(0) %} {{ power | round(1) }}kW
+                  secondary: SOLAR
+                  multiline_secondary: false
+                  fill_container: false
+                  card_mod:
+                    style:
+                      mushroom-state-info$: |
+                        .primary {
+                          font-size: 14px !important;
+                          font-weight: bold;
+                          color: white !important;          
+                        } .secondary {
+                          font-size: 12px !important;
+                          font-weight: bold;
+                          color: grey !important;       
+                        }
+                      .: |
+                        ha-card { background-color: transparent; border: none; }
+              load_power:
+                card:
+                  type: custom:mushroom-template-card
+                  primary: >
+                    {% set power = states('sensor.sigen_plant_consumed_power') |
+                    float(0) %} {{ power | round(1) }}kW
+                  secondary: HOME
+                  multiline_secondary: false
+                  fill_container: false
+                  card_mod:
+                    style:
+                      mushroom-state-info$: >
+                        .primary { font-size: 14px !important; font-weight:
+                        bold; colour: black !important; position: relative;
+                        letter-spacing: -0.1px !important; overflow: visible
+                        !important; text-align: left; }
+
+                        .secondary { font-size: 12px !important; color: gray
+                        !important; letter-spacing: -0.1px !important; position:
+                        relative; overflow: visible !important; text-align: left
+                        ; }
+                      .: |
+                        ha-card { background-color: transparent; border: none; }
+              grid_power:
+                card:
+                  type: custom:mushroom-template-card
+                  primary: >
+                    {% set import =
+                    states('sensor.sigen_plant_grid_import_power') | float(0) %}
+                    {% set export =
+                    states('sensor.sigen_plant_grid_export_power') | float(0) %}
+                    {% if import > 0 %}
+                      {{ import | round(1) }}kW
+                    {% elif export > 0 %}
+                      {{ (0 - export) | round(1) }}kW
+                    {% else %}
+                      0kW
+                    {% endif %}
+                  secondary: GRID
+                  multiline_secondary: false
+                  fill_container: false
+                  card_mod:
+                    style:
+                      mushroom-state-info$: >
+                        .primary { font-size: 14px !important; font-weight: bold
+                        !important; position: relative; letter-spacing: -0.1px
+                        !important; overflow: visible !important; text-align:
+                        left; }
+
+                        .secondary { font-size: 12px !important; color: gray
+                        !important; letter-spacing: -0.1px !important; position:
+                        relative; overflow: visible !important; text-align:
+                        left; }
+                      .: |
+                        ha-card { background-color: transparent; border: none; }
+              grid_flow_label:
+                card:
+                  type: custom:mushroom-template-card
+                  primary: >
+                    {% set import =
+                    states('sensor.sigen_plant_grid_import_power') | float(0) %}
+                    {% set export =
+                    states('sensor.sigen_plant_grid_export_power') | float(0) %}
+                    {% if import > 0 %}
+                      Importing
+                    {% elif export > 0 %}
+                      Exporting
+                    {% else %}
+                      
+                    {% endif %}
+                  multiline_secondary: false
+                  fill_container: false
+                  card_mod:
+                    style:
+                      mushroom-state-info$: >
+                        .primary { font-size: 12px !important; font-weight: bold
+                        !important; letter-spacing: -0.1px !important; color:
+                        green !important; position: relative; overflow: visible
+                        !important; text-align: left; }
+                      .: |
+                        ha-card { background-color: transparent; border: none; }
+              battery_soc:
+                card:
+                  type: custom:mushroom-template-card
+                  primary: >
+                    {% set soc =
+                    states('sensor.sigen_plant_battery_state_of_charge') %} {%
+                    set soc_power = states('sensor.sigen_plant_battery_power') |
+                    float(0) %} {% if soc_power != 0 %}
+                      {{ soc_power | abs | round(2) }}kW · {{ soc }}%
+                    {% else %}
+                      {{ soc }}%
+                    {% endif %}
+                  secondary: SigenStor
+                  multiline_secondary: false
+                  fill_container: false
+                  card_mod:
+                    style:
+                      mushroom-state-info$: >
+                        .primary { font-size: 14px !important; font-weight: bold
+                        !important; position: relative; overflow: visible
+                        !important; letter-spacing: -0.1px !important;
+                        text-align: left; }
+
+                        .secondary { font-size: 12px !important; color: gray
+                        !important; position: relative; letter-spacing: -0.1px
+                        !important; overflow: visible !important; text-align:
+                        left; }
+                      .: |
+                        ha-card { background-color: transparent; border: none; }
+              battery_discharge_label:
+                card:
+                  type: custom:mushroom-template-card
+                  primary: >
+                    {% set soc_power =
+                    states('sensor.sigen_plant_battery_power') | float(0) %} {%
+                    if soc_power < 0 %}
+                      Discharging
+                    {% else %}
+                      
+                    {% endif %}
+                  multiline_secondary: false
+                  fill_container: false
+                  card_mod:
+                    style:
+                      mushroom-state-info$: >
+                        .primary { font-size: 12px !important; font-weight: bold
+                        !important; letter-spacing: -0.1px !important; color:
+                        lightgreen !important; position: relative; overflow:
+                        visible !important; text-align: left; }
+                      .: |
+                        ha-card { background-color: transparent; border: none; }
+              battery_charge_label:
+                card:
+                  type: custom:mushroom-template-card
+                  primary: >
+                    {% set soc_power =
+                    states('sensor.sigen_plant_battery_power') | float(0) %} {%
+                    if soc_power > 0 %}
+                      Charging
+                    {% endif %}
+                  multiline_secondary: false
+                  fill_container: false
+                  card_mod:
+                    style:
+                      mushroom-state-info$: >
+                        .primary { font-size: 12px !important; font-weight: bold
+                        !important; letter-spacing: -0.1px !important; color:
+                        red !important; position: relative; overflow: visible
+                        !important; text-align: left; }
+                      .: |
+                        ha-card { background-color: transparent; border: none; }
+              ev_soc:
+                card:
+                  type: custom:mushroom-template-card
+                  primary: >
+                    {% set power =
+                    states('sensor.sign_inverter.dc_charger.output_power') |
+                    float(0) %} {% set soc =
+                    states('sensor.sign_inverter.dc_charger.vehicle_soc') %} {%
+                    if power > 0 %}
+                      {{ power | round(1) }}kW - {{ soc if soc not in ['unknown', 'unavailable', None] else 'N/A' }}%
+                    {% else %}
+                      {{ soc if soc not in ['unknown', 'unavailable', None] else 'N/A' }}%
+                    {% endif %}
+                  secondary: >
+                    {% set voltage =
+                    states('sensor.sign_inverter.dc_charger.vehicle_battery_voltage')
+                    %} {% set current =
+                    states('sensor.sign_inverter.dc_charger.charging_current')
+                    %} {% if voltage not in ['unknown', 'unavailable', None] and
+                    current not in ['unknown', 'unavailable', None] %}
+                      {{ voltage }}V @ {{ current }}A
+                    {% elif voltage not in ['unknown', 'unavailable', None] %}
+                      {{ voltage }}V
+                    {% elif current not in ['unknown', 'unavailable', None] %}
+                      {{ current }}A
+                    {% else %}
+                      DC Charger
+                    {% endif %}
+                  multiline_secondary: false
+                  fill_container: false
+                  card_mod:
+                    style:
+                      mushroom-state-info$: >
+                        .primary { font-size: 14px !important; font-weight: bold
+                        !important; position: relative; letter-spacing: -0.1px
+                        !important; overflow: visible !important; text-align:
+                        left; } .secondary { font-size: 12px !important; color:
+                        gray !important; position: relative; letter-spacing:
+                        -0.1px !important; overflow: visible !important;
+                        text-align: left; }
+                      .: |
+                        ha-card { background-color: transparent; border: none; }
+              ev_dc_power:
+                card:
+                  type: custom:mushroom-template-card
+                  primary: >
+                    {% set dcrunstatus =
+                    states('sensor.sigen_inverter_running_state') | float(0) %}
+                    {% if dcrunstatus == 2 %}
+                      Charging
+                    {% elif dcrunstatus == 3 %}
+                      Charging (Scheduled)
+                    {% elif dcrunstatus == 5 %}
+                      Reserving
+                    {% else %}
+                      Available
+                    {% endif %}
+                  secondary: DC CHARGER
+                  multiline_secondary: false
+                  fill_container: false
+                  card_mod:
+                    style:
+                      mushroom-state-info$: >
+                        .primary { font-size: 14px !important; font-weight: bold
+                        !important; position: relative; letter-spacing: -0.1px
+                        !important; overflow: visible !important; text-align:
+                        left; }
+
+                        .secondary { font-size: 12px !important; color: gray
+                        !important; position: relative; letter-spacing: -0.1px
+                        !important; overflow: visible !important; text-align:
+                        left; }
+                      .: |
+                        ha-card { background-color: transparent; border: none; }
+              ev_charging_label:
+                card:
+                  type: custom:mushroom-template-card
+                  primary: >
+                    {% set soc_power =
+                    states('sensor.sigen_inverter_dc_charger_dc_charger_output_power')
+                    | float(0) %} {% if soc_power > 0 %}
+                      Charging
+                    {% endif %}
+                  multiline_secondary: false
+                  fill_container: false
+                  card_mod:
+                    style:
+                      mushroom-state-info$: >
+                        .primary { font-size: 12px !important; font-weight: bold
+                        !important; letter-spacing: -0.1px !important; color:
+                        red !important; position: relative; overflow: visible
+                        !important; text-align: left; }
+                      .: |
+                        ha-card { background-color: transparent; border: none; }
+              ev_charging_icon:
+                card:
+                  type: custom:mushroom-template-card
+                  icon: >-
+                    {% set soc_power =
+                    states('sensor.sigen_inverter_dc_charger_dc_charger_output_power')
+                    | float(0) %} {% if soc_power > 0 %}
+                      mdi:lightning-bolt
+                    {% endif %}
+                  icon_color: >-
+                    {% set soc_power =
+                    states('sensor.sigen_inverter_dc_charger_dc_charger_output_power')
+                    | float(0) %} {% if soc_power > 0 %}
+                      red
+                    {% endif %}
+                  fill_container: false
+                  card_mod:
+                    style:
+                      mushroom-state-info$: >
+                        .primary { font-size: 12px !important; font-weight: bold
+                        !important; letter-spacing: -0.1px !important; color:
+                        lightgreen !important; position: relative; overflow:
+                        visible !important; text-align: left; }
+                      .: |
+                        ha-card { background-color: transparent; border: none; }
+            styles:
+              card:
+                - align-self: start
+                - height: >
+                    [[[ return states['input_number.sigen_home_card_height'] &&
+                    states['input_number.sigen_home_card_height'].state
+                        ? states['input_number.sigen_home_card_height'].state + 'px'
+                        : '400px'; ]]]
+                - opacity: 1
+                - background-color: transparent
+                - border: none
+              custom_fields:
+                home_image:
+                  - position: absolute
+                  - top: 5px
+                  - left: 10px
+                  - width: 395px
+                pv_power:
+                  - position: absolute
+                  - top: 40px
+                  - left: 200px
+                  - width: 100px
+                load_power:
+                  - position: absolute
+                  - top: 0px
+                  - left: 350px
+                  - width: 100px
+                grid_power:
+                  - position: absolute
+                  - top: 300px
+                  - left: 280px
+                  - width: 100px
+                grid_flow_label:
+                  - position: absolute
+                  - top: 335px
+                  - left: 280px
+                  - width: 100px
+                battery_soc:
+                  - position: absolute
+                  - top: 270px
+                  - left: 160px
+                  - width: 100px
+                battery_discharge_label:
+                  - position: absolute
+                  - top: 305px
+                  - left: 160px
+                  - width: 100px
+                battery_charge_label:
+                  - position: absolute
+                  - top: 305px
+                  - left: 160px
+                  - width: 100px
+                ev_soc:
+                  - position: absolute
+                  - top: 250px
+                  - left: 20px
+                  - width: 100px
+                ev_dc_power:
+                  - position: absolute
+                  - top: 300px
+                  - left: 20px
+                  - width: 100px
+                ev_charging_label:
+                  - position: absolute
+                  - top: 335px
+                  - left: 20px
+                  - width: 100px
+                ev_charging_icon:
+                  - position: absolute
+                  - top: 345px
+                  - left: 20px
+                  - width: 100px
 title: PV System
