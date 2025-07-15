@@ -15,7 +15,7 @@ views:
               home_image:
                 card:
                   type: picture
-                  image: /local/community/Sigenergy/home_has_solar_has_car.png
+                  image: /local/community/Sigenergy/sys_type_resd.png
                   card_mod:
                     style: |
                       ha-card { background-color: transparent; border: none; }
