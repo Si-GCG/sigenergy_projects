@@ -17,6 +17,7 @@ Anyone looking to supercharge their Home Assistant setup with Sigenergy integrat
 1. Browse the folders for cards, templates, or hacks you need.
 2. Copy, tweak, and enjoy.
 3. Got improvements? PRs welcome!
+4. double check the names of your entities and edit as required.
 
 ## Why Sigenergy?
 
