@@ -1,0 +1,37 @@
+#######################################################################
+#
+# For uploading data to PVoutput.org using the Modbus Integration.
+#
+# Notes:
+#  1) Please your API key and System ID in the /config/secrets.yaml of your HA.
+#  2) Configure the extended data settings on PVOutput for v11 and v12 for kWh and $, 
+#     and update the your tarffis settings to use them, if an Amber Electric user. Delete Lines 35 and 36 if not.
+#  3) 1 and 3 or 2 and 4 should be used in uploads.
+#  4) 1 and 3 are LIFETIME readings in Wh.
+#
+#        '&v1=' ~ ((states('sensor.sigen_plant_total_pv_energy') | float(0)) * 1000 | round(0)),
+#        '&v3=' ~ ((states('sensor.sigen_plant_total_consumed_energy') | float(0)) * 1000 | round(0)),
+#
+
+rest_command:
+  update_pvoutput:
+    url: https://pvoutput.org/service/r2/addstatus.jsp
+    method: post
+    content_type: "application/x-www-form-urlencoded"
+    headers:
+      X-Pvoutput-Apikey: !secret pvoutput_api_key
+      X-Pvoutput-SystemId: !secret pvoutput_system_id
+    payload: |-
+      {{ ''.join([
+        'd=' ~ now().strftime('%Y%m%d'),
+        '&t=' ~ now().strftime('%H:%M'),
+        '&c1=1',
+        '&v2=' ~ ((states('sensor.sigen_plant_pv_power') | float(0)) * 1000 | round(0)),
+        '&v4=' ~ ((states('sensor.sigen_plant_consumed_power') | float(0)) * 1000 | round(0)),
+        '&v6=' ~ (states('sensor.sigen_inverter_phase_a_voltage')),
+        '&v7=' ~ (states('sensor.sigen_plant_battery_state_of_charge')),
+        '&v8=' ~ ((states('sensor.sigen_plant_daily_grid_import_energy') | float(0)) | round(5)),
+        '&v9=' ~ ((states('sensor.sigen_plant_daily_grid_export_energy') | float(0)) | round(5)),
+        '&v11=' ~ ((states('sensor.amber_feed_in_price') | float(0)) ),
+        '&v12=' ~ ((states('sensor.amber_general_price') | float(0)) )
+      ]) }}
