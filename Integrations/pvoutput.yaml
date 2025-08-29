@@ -3,7 +3,7 @@
 # For uploading data to PVoutput.org using the Modbus Integration.
 #
 # Notes:
-#  1) Please your API key and System ID in the /config/secrets.yaml of your HA.
+#  1) Please add your API key and System ID in the /config/secrets.yaml of your HA.
 #  2) Configure the extended data settings on PVOutput for v11 and v12 for kWh and $, 
 #     and update the your tarffis settings to use them, if an Amber Electric user. Delete Lines 35 and 36 if not.
 #  3) 1 and 3 or 2 and 4 should be used in uploads.
