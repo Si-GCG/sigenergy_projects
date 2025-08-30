@@ -1,1 +1,1 @@
-This is hust a file to make the integration work with my instance
+This is just a file to make the integration work with my instance
